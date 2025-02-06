@@ -36,8 +36,8 @@ const SELECTION_CONFIG = {
   START_Y: 120, // Moved down to center on screen
   STRIPE_HEIGHT: 80,
   CHANGE_INTERVAL: 200, // 5 times per second
-  SELECTION_DURATION: 5000, // 10 seconds
-  PAUSE_DURATION: 3000, // 5 seconds
+  SELECTION_DURATION: 4000, // 4 seconds
+  PAUSE_DURATION: 2000, // 2 seconds
 };
 
 function CrazyColorsGame() {
@@ -70,18 +70,18 @@ function CrazyColorsGame() {
   });
   const [showAnswer, setShowAnswer] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
-  const [timer, setTimer] = useState(null);
+  /* const [timer, setTimer] = useState(null); */
 
   // Handle ESC key
   useEffect(() => {
     const handleEsc = (event) => {
-      if (event.key === "Escape") {
+      if (event.key === "Escape" && !showAnswer) {
         setShowExit(true);
       }
     };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
-  }, []);
+  }, [showAnswer]);
 
   // Selection screen animation
   // Selection screen animation
@@ -136,11 +136,12 @@ function CrazyColorsGame() {
       bgIdx = Math.floor(Math.random() * COLOR_NAMES.length);
     } while (bgIdx === lettersIdx);
 
-    setCurrentQuestion((prev) => ({
+    /* setCurrentQuestion((prev) => ({ */
+    setCurrentQuestion({
       lettersColorIndex: lettersIdx,
       backgroundColorIndex: bgIdx,
       textSelected: selectionIndex,
-    }));
+    });
   }, [selectionIndex]);
 
   // Call generateNewQuestion when entering MAIN screen
@@ -159,12 +160,6 @@ function CrazyColorsGame() {
         : answerIndex === currentQuestion.backgroundColorIndex;
 
     setIsAnswerCorrect(isCorrect);
-    setGameStats((prev) => ({
-      ...prev,
-      questionsAll: prev.questionsAll + 1,
-      answersCorrect: prev.answersCorrect + (isCorrect ? 1 : 0),
-      answersWrong: prev.answersWrong + (isCorrect ? 0 : 1),
-    }));
     setShowAnswer(true);
   };
 
@@ -416,7 +411,10 @@ function CrazyColorsGame() {
     // Handle any key press except ESC
     useEffect(() => {
       const handleKeyPress = (event) => {
-        if (event.key !== "Escape") {
+        if (event.key === "Escape") {
+          setShowAnswer(false);
+          setShowExit(true);
+        } else {
           setShowAnswer(false);
           setCurrentScreen(SCREENS.SELECTION);
         }
@@ -437,6 +435,12 @@ function CrazyColorsGame() {
           <p>Для продолжения нажмите любую кнопку</p>
           <button
             onClick={() => {
+              setGameStats((prev) => ({
+                ...prev,
+                questionsAll: prev.questionsAll + 1,
+                answersCorrect: prev.answersCorrect + (isAnswerCorrect ? 1 : 0),
+                answersWrong: prev.answersWrong + (isAnswerCorrect ? 0 : 1),
+              }));
               setShowAnswer(false);
               setCurrentScreen(SCREENS.SELECTION);
             }}
