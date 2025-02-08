@@ -57,14 +57,8 @@ const GAME_DIMENSIONS = {
 };
 
 const SELECTION_CONFIG = {
-  START_Y: {
-    DESKTOP: 120,
-    MOBILE: 80,
-  },
-  STRIPE_HEIGHT: {
-    DESKTOP: 80,
-    MOBILE: 60,
-  },
+  START_Y: 120,
+  STRIPE_HEIGHT: 80,
   CHANGE_INTERVAL: 200,
   SELECTION_DURATION: 4000,
   PAUSE_DURATION: 2000,
@@ -249,25 +243,21 @@ function CrazyColorsGame() {
   );
 
   const SelectionScreen = () => {
-    const stripeHeight = deviceType.isMobile
-      ? SELECTION_CONFIG.STRIPE_HEIGHT.MOBILE
-      : SELECTION_CONFIG.STRIPE_HEIGHT.DESKTOP;
-
-    const startY = deviceType.isMobile
-      ? SELECTION_CONFIG.START_Y.MOBILE
-      : SELECTION_CONFIG.START_Y.DESKTOP;
-
     return (
       <div className="h-screen w-full relative overflow-hidden">
         {/* Color stripes */}
-        <div className="absolute inset-0 flex flex-col items-center">
+        <div
+          className={`absolute inset-0 flex flex-col items-center ${
+            deviceType.isMobile ? "scale-75" : ""
+          }`}
+        >
           {COLOR_CODES.map((color, index) => (
             <div
               key={index}
               className="absolute w-full"
               style={{
                 backgroundColor: color,
-                height: `${stripeHeight}px`,
+                height: `${SELECTION_CONFIG.STRIPE_HEIGHT}px`,
                 top: `${
                   SELECTION_CONFIG.START_Y +
                   index * SELECTION_CONFIG.STRIPE_HEIGHT
@@ -279,12 +269,13 @@ function CrazyColorsGame() {
 
         {/* Moving/Selected word */}
         <button
-          className={`absolute left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg text-white font-bold z-10 text-sm        
+          className={`absolute left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg text-white font-bold z-10 text-sm
             ${
               isSelectionFixed
                 ? "transition-all duration-500"
                 : "transition-all duration-300"
-            }`}
+            }
+            ${deviceType.isMobile ? "scale-75" : ""}`}
           style={{
             top: isSelectionFixed
               ? `${
@@ -293,9 +284,8 @@ function CrazyColorsGame() {
                   SELECTION_CONFIG.STRIPE_HEIGHT / 2
                 }px`
               : `${selectionY + SELECTION_CONFIG.STRIPE_HEIGHT / 2}px`,
-            backgroundColor: "#C0C0C0", // silver
-            color: "#FFFFFF", // white
-            /*            textShadow: "2px 2px 4px rgba(0,0,0,0.5)",  */
+            backgroundColor: "#C0C0C0",
+            color: "#FFFFFF",
             transform: `translate(-50%, -50%) ${
               isSelectionFixed ? "scale(3)" : "scale(2)"
             }`,
