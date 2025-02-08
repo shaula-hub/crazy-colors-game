@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
+// Import for device detection
+import { useLayoutEffect } from "react";
 
 // Constants
 const COLOR_NAMES = [
@@ -32,12 +34,40 @@ const SCREENS = {
   MAIN: "main",
 };
 
+// Device detection function
+const getWindowDimensions = () => {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    isMobile: width <= 768,
+    screenWidth: width,
+    screenHeight: height,
+  };
+};
+
+// Game dimensions configuration
+const GAME_DIMENSIONS = {
+  DESKTOP: {
+    width: 600,
+    height: 720,
+  },
+  MOBILE: {
+    width: "100%",
+    minHeight: 640,
+  },
+};
+
 const SELECTION_CONFIG = {
-  START_Y: 120, // Moved down to center on screen
-  STRIPE_HEIGHT: 80,
-  CHANGE_INTERVAL: 200, // 5 times per second
-  SELECTION_DURATION: 4000, // 4 seconds
-  PAUSE_DURATION: 2000, // 2 seconds
+  START_Y: {
+    DESKTOP: 120,
+    MOBILE: 80,
+  },
+  STRIPE_HEIGHT: {
+    DESKTOP: 80,
+    MOBILE: 60,
+  },
+  CHANGE_INTERVAL: 200,
+  SELECTION_DURATION: 4000,
+  PAUSE_DURATION: 2000,
 };
 
 function CrazyColorsGame() {
@@ -71,6 +101,19 @@ function CrazyColorsGame() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
   /* const [timer, setTimer] = useState(null); */
+
+  // Device detection state
+  const [deviceType, setDeviceType] = useState(getWindowDimensions());
+
+  // Handle window resize
+  useLayoutEffect(() => {
+    function updateSize() {
+      setDeviceType(getWindowDimensions());
+    }
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
 
   // Handle ESC key
   useEffect(() => {
@@ -206,7 +249,13 @@ function CrazyColorsGame() {
   );
 
   const SelectionScreen = () => {
-    const stripeHeight = SELECTION_CONFIG.STRIPE_HEIGHT;
+    const stripeHeight = deviceType.isMobile
+      ? SELECTION_CONFIG.STRIPE_HEIGHT.MOBILE
+      : SELECTION_CONFIG.STRIPE_HEIGHT.DESKTOP;
+
+    const startY = deviceType.isMobile
+      ? SELECTION_CONFIG.START_Y.MOBILE
+      : SELECTION_CONFIG.START_Y.DESKTOP;
 
     return (
       <div className="h-screen w-full relative overflow-hidden">
@@ -455,7 +504,19 @@ function CrazyColorsGame() {
 
   // Main render logic
   return (
-    <div className="h-screen w-full max-w-md mx-auto">
+    <div
+      style={{
+        width: deviceType.isMobile
+          ? GAME_DIMENSIONS.MOBILE.width
+          : GAME_DIMENSIONS.DESKTOP.width,
+        height: deviceType.isMobile
+          ? GAME_DIMENSIONS.MOBILE.minHeight
+          : GAME_DIMENSIONS.DESKTOP.height,
+        margin: "0 auto",
+        maxWidth: "100%",
+      }}
+      className="relative bg-white shadow-lg overflow-hidden h-screen w-full max-w-md mx-auto"
+    >
       {currentScreen === SCREENS.INTRO && <IntroScreen />}
       {currentScreen === SCREENS.SELECTION && <SelectionScreen />}
       {currentScreen === SCREENS.MAIN && <MainScreen />}
