@@ -58,7 +58,7 @@ const GAME_DIMENSIONS = {
 
 const SELECTION_CONFIG = {
   START_Y: 120,
-  STRIPE_HEIGHT: 80,
+  STRIPE_HEIGHT: 65,
   CHANGE_INTERVAL: 200,
   SELECTION_DURATION: 4000,
   PAUSE_DURATION: 2000,
@@ -98,6 +98,8 @@ function CrazyColorsGame() {
 
   // Device detection state
   const [deviceType, setDeviceType] = useState(getWindowDimensions());
+
+  const [selectedButtonIndex, setSelectedButtonIndex] = useState(null);
 
   // Handle window resize
   useLayoutEffect(() => {
@@ -189,6 +191,7 @@ function CrazyColorsGame() {
   }, [currentScreen, generateNewQuestion]);
 
   const handleAnswer = (answerIndex) => {
+    setSelectedButtonIndex(answerIndex);
     const isCorrect =
       (settings.regim === 1
         ? Math.floor(Math.random() * 2)
@@ -244,6 +247,15 @@ function CrazyColorsGame() {
   const SelectionScreen = () => {
     return (
       <div className="h-screen w-full relative overflow-hidden">
+        {/* Title */}
+        <h1
+          className="absolute top-4 md:top-2 left-0 right-0 text-6xl md:text-8xl font-bold text-center z-20"
+          style={{ color: "#000080" }}
+        >
+          {" "}
+          {/* navy color */}
+          Crazy Colors
+        </h1>
         {/* Color stripes */}
         <div
           className={`absolute inset-0 flex flex-col items-center ${
@@ -299,30 +311,47 @@ function CrazyColorsGame() {
   const MainScreen = () => (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100">
       {/* Section 1: Title */}
-      <h2 className="text-xl md:text-2xl font-bold mb-4 text-center">
-        {
-          OPTIONS[
-            settings.regim === 1
-              ? Math.floor(Math.random() * 2)
-              : settings.optionIndex
-          ]
-        }
-      </h2>
+      <div className="flex items-center justify-center h-16 md:h-24 mb-4">
+        <h2
+          className="text-4xl md:text-5xl font-bold text-center"
+          style={{
+            color: "#000080",
+            letterSpacing: "0.05em" /* For better readability */,
+          }}
+        >
+          {
+            OPTIONS[
+              settings.regim === 1
+                ? Math.floor(Math.random() * 2)
+                : settings.optionIndex
+            ]
+          }
+        </h2>
+      </div>
+
       {/* Section 2: Statistics */}
       <div className="bg-white p-4 rounded-lg shadow mb-4">
-        <p>Всего вопросов: {gameStats.questionsAll}</p>
-        <p className="text-green-600">Правильно: {gameStats.answersCorrect}</p>
-        <p className="text-red-600">Неверно: {gameStats.answersWrong}</p>
-        <p>
-          Время: {Math.floor(gameStats.timeSpent / 60)}:
-          {(gameStats.timeSpent % 60).toString().padStart(2, "0")}
-        </p>
-        <p>Среднее время: {gameStats.timePerAnswer}с</p>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <p>Всего вопросов: {gameStats.questionsAll}</p>
+            <p className="text-green-600">
+              Правильно: {gameStats.answersCorrect}
+            </p>
+            <p className="text-red-600">Неверно: {gameStats.answersWrong}</p>
+          </div>
+          <div>
+            <p>
+              Время: {Math.floor(gameStats.timeSpent / 60)}:
+              {(gameStats.timeSpent % 60).toString().padStart(2, "0")}
+            </p>
+            <p>Среднее время: {gameStats.timePerAnswer}с</p>
+          </div>
+        </div>
       </div>
 
       {/* Section 3: Color Display */}
       <div
-        className="p-8 rounded-lg mb-4 flex items-center justify-center text-2xl md:text-4xl font-bold"
+        className="p-8 rounded-lg mb-6 md:mb-8 flex items-center justify-center text-5xl md:text-7xl font-bold h-48 md:h-64 leading-loose"
         style={{
           backgroundColor: COLOR_CODES[currentQuestion.backgroundColorIndex],
           color: COLOR_CODES[currentQuestion.lettersColorIndex],
@@ -337,7 +366,20 @@ function CrazyColorsGame() {
           <button
             key={index}
             onClick={() => handleAnswer(index)}
-            className="bg-blue-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-blue-600"
+            className={`text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base font-extrabold rounded transition-opacity
+              ${
+                selectedButtonIndex === index
+                  ? "opacity-50"
+                  : "hover:opacity-80"
+              }`}
+            style={{
+              backgroundColor: "#DA70D6",
+              transform:
+                selectedButtonIndex === index ? "scale(0.95)" : "scale(1)",
+            }}
+
+            //            className="text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base font-extrabold rounded hover:opacity-80 transition-opacity"
+            //            style={{ backgroundColor: "#DA70D6" }}  /* orchid color */
           >
             {name}
           </button>
@@ -461,15 +503,22 @@ function CrazyColorsGame() {
     }, []);
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 flex justify-center"
+        style={{ paddingTop: "20vh" }}
+      >
         <div
-          className="p-6 rounded-lg w-96 text-center"
-          style={{ backgroundColor: isAnswerCorrect ? "#7DF9FF" : "#FAA0A0" }}
+          className="rounded-lg w-96 flex flex-col items-center"
+          style={{
+            backgroundColor: isAnswerCorrect ? "#7DF9FF" : "#FAA0A0",
+            height: "fit-content",
+            padding: "2rem",
+          }}
         >
-          <h2 className="text-xl md:text-2xl font-bold mb-4">
+          <h2 className="text-2xl font-bold mb-6">
             {isAnswerCorrect ? "Это верный ответ!" : "Неправильно!"}
           </h2>
-          <p>Для продолжения нажмите любую кнопку</p>
+          <p className="mb-8">Для продолжения нажмите любую кнопку</p>
           <button
             onClick={() => {
               setGameStats((prev) => ({
@@ -481,7 +530,7 @@ function CrazyColorsGame() {
               setShowAnswer(false);
               setCurrentScreen(SCREENS.SELECTION);
             }}
-            className="mt-6 bg-blue-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-8 py-2 rounded-lg hover:bg-blue-600 transition-colors"
           >
             Продолжить
           </button>
@@ -502,6 +551,7 @@ function CrazyColorsGame() {
           : GAME_DIMENSIONS.DESKTOP.height,
         margin: "0 auto",
         maxWidth: "100%",
+        border: "2px solid black",
       }}
       className="relative bg-white shadow-lg overflow-hidden h-screen w-full max-w-md mx-auto"
     >
