@@ -25,6 +25,7 @@ const COLOR_CODES = [
   "#0000FF",
   "#8B00FF",
 ];
+const PRESSED_COLOR = "#6F00FF";
 const OPTIONS = ["Какого цвета буквы?", "Какого цвета фон?"];
 
 // Game screens enum
@@ -217,29 +218,68 @@ function CrazyColorsGame() {
 
   // Components
   const IntroScreen = () => (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-black via-red-500 to-violet-600">
-      <h1 className="text-8xl font-bold text-white mb-12 text-center">
-        Crazy Colors
-      </h1>
-      <div className="flex flex-col gap-4 items-center">
-        <button
-          onClick={() => setCurrentScreen(SCREENS.SELECTION)}
-          className="bg-teal-500 text-white px-6 py-4 md:px-8 md:py-3 rounded-lg hover:bg-teal-600 hover:scale-110 transition-all duration-300 font-bold w-36 md:w-48 text-sm md:text-base"
-        >
-          START
-        </button>
-        <button
-          onClick={() => setShowSettings(true)}
-          className="bg-teal-500 text-white px-6 py-4 md:px-8 md:py-3 rounded-lg hover:bg-teal-600 hover:scale-110 transition-all duration-300 font-bold shadow-lg w-36 md:w-48 text-sm md:text-base"
-        >
-          SETTINGS
-        </button>
-        <button
-          onClick={() => setShowExit(true)}
-          className="bg-teal-500 text-white px-6 py-4 md:px-8 md:py-3 rounded-lg hover:bg-teal-600 hover:scale-110 transition-all duration-300 font-bold shadow-lg w-36 md:w-48 text-sm md:text-base"
-        >
-          QUIT
-        </button>
+    <div className="h-screen bg-gradient-to-b from-black via-red-500 to-violet-600">
+      <div className="absolute w-full top-24">
+        {" "}
+        {/* Position from top */}
+        <h1 className="text-8xl font-bold text-white mb-8 text-center">
+          Crazy Colors
+        </h1>
+        <div className="text-center text-white">
+          <p className="text-4xl font-semibold mb-2">Укажите цвет</p>
+          <p className="text-4xl font-semibold">букв или фона</p>
+        </div>
+      </div>
+      <div className="absolute bottom-24 left-1/2 -translate-x-1/2">
+        {" "}
+        {/* Position buttons from bottom */}
+        <div className="flex flex-col gap-4 items-center">
+          <button
+            onClick={() => setCurrentScreen(SCREENS.SELECTION)}
+            className="text-white px-6 py-4 md:px-8 md:py-3 rounded-lg hover:scale-110 transition-all duration-300 font-bold w-36 md:w-48 text-sm md:text-base"
+            style={{
+              backgroundColor: "#008080",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = PRESSED_COLOR;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#008080";
+            }}
+          >
+            START
+          </button>
+          <button
+            onClick={() => setShowSettings(true)}
+            className="text-white px-6 py-4 md:px-8 md:py-3 rounded-lg hover:scale-110 transition-all duration-300 font-bold w-36 md:w-48 text-sm md:text-base"
+            style={{
+              backgroundColor: "#008080",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = PRESSED_COLOR;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#008080";
+            }}
+          >
+            SETTINGS
+          </button>
+          <button
+            onClick={() => setShowExit(true)}
+            className="text-white px-6 py-4 md:px-8 md:py-3 rounded-lg hover:scale-110 transition-all duration-300 font-bold w-36 md:w-48 text-sm md:text-base"
+            style={{
+              backgroundColor: "#008080",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = PRESSED_COLOR;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#008080";
+            }}
+          >
+            QUIT
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -366,20 +406,24 @@ function CrazyColorsGame() {
           <button
             key={index}
             onClick={() => handleAnswer(index)}
-            className={`text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base font-extrabold rounded transition-opacity
-              ${
-                selectedButtonIndex === index
-                  ? "opacity-50"
-                  : "hover:opacity-80"
-              }`}
+            className="text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base font-extrabold rounded"
             style={{
-              backgroundColor: "#DA70D6",
+              backgroundColor:
+                selectedButtonIndex === index ? PRESSED_COLOR : "#DA70D6",
               transform:
                 selectedButtonIndex === index ? "scale(0.95)" : "scale(1)",
+              transition: "transform 0.3s",
             }}
-
-            //            className="text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base font-extrabold rounded hover:opacity-80 transition-opacity"
-            //            style={{ backgroundColor: "#DA70D6" }}  /* orchid color */
+            onMouseEnter={(e) => {
+              if (selectedButtonIndex === null) {
+                e.currentTarget.style.backgroundColor = PRESSED_COLOR;
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (selectedButtonIndex === null) {
+                e.currentTarget.style.backgroundColor = "#DA70D6";
+              }
+            }}
           >
             {name}
           </button>
@@ -505,7 +549,7 @@ function CrazyColorsGame() {
     return (
       <div
         className="fixed inset-0 bg-black bg-opacity-50 flex justify-center"
-        style={{ paddingTop: "20vh" }}
+        style={{ paddingTop: "15vh" }}
       >
         <div
           className="rounded-lg w-96 flex flex-col items-center"
@@ -527,6 +571,7 @@ function CrazyColorsGame() {
                 answersCorrect: prev.answersCorrect + (isAnswerCorrect ? 1 : 0),
                 answersWrong: prev.answersWrong + (isAnswerCorrect ? 0 : 1),
               }));
+              setSelectedButtonIndex(null); // Reset button state
               setShowAnswer(false);
               setCurrentScreen(SCREENS.SELECTION);
             }}
