@@ -221,20 +221,19 @@ function CrazyColorsGame() {
       <div className="flex flex-col gap-4 items-center">
         <button
           onClick={() => setCurrentScreen(SCREENS.SELECTION)}
-          className="bg-teal-500 text-white px-8 py-3 rounded-lg hover:bg-teal-600 hover:scale-110 transition-all duration-300 font-bold w-48"
-          /* className="bg-teal-500 text-white px-8 py-3 rounded-lg hover:bg-teal-600 hover:scale-110 transition-all duration-300 font-bold shadow-lg w-48" */
+          className="bg-teal-500 text-white px-6 py-4 md:px-8 md:py-3 rounded-lg hover:bg-teal-600 hover:scale-110 transition-all duration-300 font-bold w-36 md:w-48 text-sm md:text-base"
         >
           START
         </button>
         <button
           onClick={() => setShowSettings(true)}
-          className="bg-teal-500 text-white px-8 py-3 rounded-lg hover:bg-teal-600 hover:scale-110 transition-all duration-300 font-bold shadow-lg w-48"
+          className="bg-teal-500 text-white px-6 py-4 md:px-8 md:py-3 rounded-lg hover:bg-teal-600 hover:scale-110 transition-all duration-300 font-bold shadow-lg w-36 md:w-48 text-sm md:text-base"
         >
           SETTINGS
         </button>
         <button
           onClick={() => setShowExit(true)}
-          className="bg-teal-500 text-white px-8 py-3 rounded-lg hover:bg-teal-600 hover:scale-110 transition-all duration-300 font-bold shadow-lg w-48"
+          className="bg-teal-500 text-white px-6 py-4 md:px-8 md:py-3 rounded-lg hover:bg-teal-600 hover:scale-110 transition-all duration-300 font-bold shadow-lg w-36 md:w-48 text-sm md:text-base"
         >
           QUIT
         </button>
@@ -300,7 +299,7 @@ function CrazyColorsGame() {
   const MainScreen = () => (
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100">
       {/* Section 1: Title */}
-      <h2 className="text-2xl font-bold mb-4 text-center">
+      <h2 className="text-xl md:text-2xl font-bold mb-4 text-center">
         {
           OPTIONS[
             settings.regim === 1
@@ -309,7 +308,6 @@ function CrazyColorsGame() {
           ]
         }
       </h2>
-
       {/* Section 2: Statistics */}
       <div className="bg-white p-4 rounded-lg shadow mb-4">
         <p>Всего вопросов: {gameStats.questionsAll}</p>
@@ -324,7 +322,7 @@ function CrazyColorsGame() {
 
       {/* Section 3: Color Display */}
       <div
-        className="p-8 rounded-lg mb-4 flex items-center justify-center text-4xl font-bold"
+        className="p-8 rounded-lg mb-4 flex items-center justify-center text-2xl md:text-4xl font-bold"
         style={{
           backgroundColor: COLOR_CODES[currentQuestion.backgroundColorIndex],
           color: COLOR_CODES[currentQuestion.lettersColorIndex],
@@ -334,12 +332,12 @@ function CrazyColorsGame() {
       </div>
 
       {/* Section 4: Color Buttons */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {COLOR_NAMES.map((name, index) => (
           <button
             key={index}
             onClick={() => handleAnswer(index)}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-blue-600"
           >
             {name}
           </button>
@@ -351,7 +349,7 @@ function CrazyColorsGame() {
   const SettingsModal = () => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg w-96">
-        <h2 className="text-2xl font-bold mb-4">Настройки</h2>
+        <h2 className="text-xl md:text-2xl font-bold mb-4">Настройки</h2>
         <div className="space-y-4">
           <div>
             <input
@@ -382,7 +380,7 @@ function CrazyColorsGame() {
         </div>
         <button
           onClick={() => setShowSettings(false)}
-          className="mt-6 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="mt-6 bg-blue-500 text-white px-4 py-2 text-sm md:text-base rounded hover:bg-blue-600"
         >
           Закрыть
         </button>
@@ -394,29 +392,29 @@ function CrazyColorsGame() {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg w-96">
         <div className="bg-cyan-200 p-4 rounded-lg mb-6">
-          <h2 className="text-3xl font-bold text-center">ВЫХОД</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-center">ВЫХОД</h2>
         </div>
         <div className="space-y-2 mb-6">
           <p>Всего вопросов: {gameStats.questionsAll}</p>
           <p>Отвечено правильно: {gameStats.answersCorrect}</p>
           <p>Отвечено неверно: {gameStats.answersWrong}</p>
-          <p>Среднее время на ответ: {gameStats.timePerAnswer}с</p>
+          <p>Среднее время на ответ: {gameStats.timePerAnswer} сек</p>
         </div>
         <div className="bg-cyan-200 p-4 rounded-lg mb-6">
-          <p className="text-3xl font-bold text-center">
+          <p className="text-2xl md:text-3xl font-bold text-center">
             Вы уверены, что хотите выйти?
           </p>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <button
             onClick={() => setShowExit(false)}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            className="bg-green-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-green-600"
           >
             Продолжить
           </button>
           <button
             onClick={resetGame}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-blue-600"
           >
             Начать заново
           </button>
@@ -425,7 +423,7 @@ function CrazyColorsGame() {
               setShowExit(false);
               setShowSettings(true);
             }}
-            className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+            className="bg-yellow-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-yellow-600"
           >
             Настройки
           </button>
@@ -437,7 +435,7 @@ function CrazyColorsGame() {
                 window.electron.closeWindow();
               }
             }}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="bg-red-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-red-600"
           >
             Выйти
           </button>
@@ -468,7 +466,7 @@ function CrazyColorsGame() {
           className="p-6 rounded-lg w-96 text-center"
           style={{ backgroundColor: isAnswerCorrect ? "#7DF9FF" : "#FAA0A0" }}
         >
-          <h2 className="text-2xl font-bold mb-4">
+          <h2 className="text-xl md:text-2xl font-bold mb-4">
             {isAnswerCorrect ? "Это верный ответ!" : "Неправильно!"}
           </h2>
           <p>Для продолжения нажмите любую кнопку</p>
@@ -483,7 +481,7 @@ function CrazyColorsGame() {
               setShowAnswer(false);
               setCurrentScreen(SCREENS.SELECTION);
             }}
-            className="mt-6 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="mt-6 bg-blue-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-blue-600"
           >
             Продолжить
           </button>
