@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 // Import for device detection
 import { useLayoutEffect } from "react";
 
@@ -218,16 +218,25 @@ function CrazyColorsGame() {
 
   // Components
   const IntroScreen = () => (
-    <div className="h-screen bg-gradient-to-b from-black via-red-500 to-violet-600">
+    // <div className="h-screen bg-gradient-to-b from-black via-red-500 to-violet-600">
+      <div 
+        className="h-screen" 
+        style={{
+          background: "linear-gradient(to bottom, #000000, #FF0000, #FFA500, #FFFF00, #008000, #0000FF, #4B0082, #9400D3)"
+        }}
+      >      
       <div className="absolute w-full top-24">
         {" "}
         {/* Position from top */}
         <h1 className="text-8xl font-bold text-white mb-8 text-center">
+        {/* style={{
+              backgroundColor: "#1900d7"
+            }} */}
           Crazy Colors
         </h1>
-        <div className="text-center text-white">
-          <p className="text-4xl font-semibold mb-2">Укажите цвет</p>
-          <p className="text-4xl font-semibold">букв или фона</p>
+        <div className="text-center" style={{ color: "#1900d7" }}>
+          <p className="text-7xl font-semibold mb-2">Укажите цвет</p>
+          <p className="text-6xl font-semibold" style={{ color: "#3700a4" }}>букв или фона</p>
         </div>
       </div>
       <div className="absolute bottom-24 left-1/2 -translate-x-1/2">
@@ -238,13 +247,13 @@ function CrazyColorsGame() {
             onClick={() => setCurrentScreen(SCREENS.SELECTION)}
             className="text-white px-6 py-4 md:px-8 md:py-3 rounded-lg hover:scale-110 transition-all duration-300 font-bold w-36 md:w-48 text-sm md:text-base"
             style={{
-              backgroundColor: "#008080",
+              backgroundColor: "#a00000",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = PRESSED_COLOR;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#008080";
+              e.currentTarget.style.backgroundColor = "#a00000";
             }}
           >
             START
@@ -253,13 +262,13 @@ function CrazyColorsGame() {
             onClick={() => setShowSettings(true)}
             className="text-white px-6 py-4 md:px-8 md:py-3 rounded-lg hover:scale-110 transition-all duration-300 font-bold w-36 md:w-48 text-sm md:text-base"
             style={{
-              backgroundColor: "#008080",
+              backgroundColor: "#b80000"
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = PRESSED_COLOR;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#008080";
+              e.currentTarget.style.backgroundColor = "#b80000";
             }}
           >
             SETTINGS
@@ -268,16 +277,16 @@ function CrazyColorsGame() {
             onClick={() => setShowExit(true)}
             className="text-white px-6 py-4 md:px-8 md:py-3 rounded-lg hover:scale-110 transition-all duration-300 font-bold w-36 md:w-48 text-sm md:text-base"
             style={{
-              backgroundColor: "#008080",
+              backgroundColor: "#ec0000"
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = PRESSED_COLOR;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#008080";
+              e.currentTarget.style.backgroundColor = "#ec0000";
             }}
           >
-            QUIT
+            INFORMATION
           </button>
         </div>
       </div>
@@ -352,22 +361,34 @@ function CrazyColorsGame() {
     <div className="h-screen w-full flex flex-col p-4 bg-gray-100">
       {/* Section 1: Title */}
       <div className="flex items-center justify-center h-16 md:h-24 mb-4">
-        <h2
-          className="text-4xl md:text-5xl font-bold text-center"
-          style={{
-            color: "#000080",
-            letterSpacing: "0.05em" /* For better readability */,
-          }}
-        >
-          {
-            OPTIONS[
-              settings.regim === 1
-                ? Math.floor(Math.random() * 2)
-                : settings.optionIndex
-            ]
-          }
-        </h2>
-      </div>
+        <div className="p-2 rounded" style={{
+    background: "linear-gradient(to right, #9400D3, #4B0082, #0000FF, #008000, #FFFF00, #FFA500, #FF0000)",
+    border: "2px solid transparent",
+    borderImage: "linear-gradient(to right, #FF0000, #FFA500, #FFFF00, #008000, #0000FF, #4B0082, #9400D3) 1",
+  }}>
+    <h2
+      className="text-4xl md:text-5xl font-bold text-center"
+      style={{
+        background: "linear-gradient(to right, #FFFF00, #FFA500, #a50000, #ffffff, #fff400, #4B0082, #9400D3, #FF0000, #000000, #008000, #0000FF)",
+        WebkitBackgroundClip: "text",
+        backgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        color: "transparent",
+        letterSpacing: "0.05em",
+        margin: 0,
+        padding: "4px"
+      }}
+    >
+      {
+        OPTIONS[
+          settings.regim === 1
+            ? Math.floor(Math.random() * 2)
+            : settings.optionIndex
+        ]
+      }
+    </h2>
+  </div>
+</div>
 
       {/* Section 2: Statistics */}
       <div className="bg-white p-4 rounded-lg shadow mb-4">
@@ -477,8 +498,10 @@ function CrazyColorsGame() {
   const ExitModal = () => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg w-96">
-        <div className="bg-cyan-200 p-4 rounded-lg mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-center">ВЫХОД</h2>
+        <div className="text-white p-4 rounded-lg mb-6" style={{backgroundColor: "#a00000"}}>
+          <h2 className="text-2xl md:text-3xl font-bold text-center">
+            ИНФОРМАЦИЯ
+          </h2>
         </div>
         <div className="space-y-2 mb-6">
           <p>Всего вопросов: {gameStats.questionsAll}</p>
@@ -486,34 +509,64 @@ function CrazyColorsGame() {
           <p>Отвечено неверно: {gameStats.answersWrong}</p>
           <p>Среднее время на ответ: {gameStats.timePerAnswer} сек</p>
         </div>
-        <div className="bg-cyan-200 p-4 rounded-lg mb-6">
-          <p className="text-2xl md:text-3xl font-bold text-center">
-            Вы уверены, что хотите выйти?
+        <div className="p-4 rounded-lg mb-6" style={{backgroundColor: "#d00000"}}>
+          <p className="text-2xl text-white md:text-3xl font-bold text-center">
+            Выберите дальнейшее действие
           </p>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <button
             onClick={() => setShowExit(false)}
-            className="bg-green-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-green-600"
+            className="bg-blue-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-green-600"
+            style={{
+              backgroundColor: "#000ee3"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#6b238d";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#000ee3";
+            }}            
           >
             Продолжить
           </button>
           <button
             onClick={resetGame}
             className="bg-blue-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-blue-600"
+            style={{
+              backgroundColor: "#000ee3"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#6b238d";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#000ee3";
+            }}            
           >
             Начать заново
           </button>
+          <div className="col-span-2 flex justify-center mt-2">          
           <button
             onClick={() => {
               setShowExit(false);
               setShowSettings(true);
             }}
-            className="bg-yellow-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-yellow-600"
+            className="bg-blue-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded"
+            style={{
+              backgroundColor: "#000ee3"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#6b238d";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#000ee3";
+            }}            
+            // className="bg-yellow-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-yellow-600"
           >
             Настройки
           </button>
-          <button
+          </div>
+          {/* <button
             onClick={() => {
               window.open("", "_self").close();
               window.close();
@@ -524,7 +577,7 @@ function CrazyColorsGame() {
             className="bg-red-500 text-white px-3 py-3 md:px-4 md:py-2 text-sm md:text-base rounded hover:bg-red-600"
           >
             Выйти
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
@@ -550,6 +603,17 @@ function CrazyColorsGame() {
       <div
         className="fixed inset-0 bg-black bg-opacity-50 flex justify-center"
         style={{ paddingTop: "15vh" }}
+        onClick={() => {
+          setGameStats((prev) => ({
+            ...prev,
+            questionsAll: prev.questionsAll + 1,
+            answersCorrect: prev.answersCorrect + (isAnswerCorrect ? 1 : 0),
+            answersWrong: prev.answersWrong + (isAnswerCorrect ? 0 : 1),
+          }));
+          setSelectedButtonIndex(null); // Reset button state
+          setShowAnswer(false);
+          setCurrentScreen(SCREENS.SELECTION);
+        }}
       >
         <div
           className="rounded-lg w-96 flex flex-col items-center"
